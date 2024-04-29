@@ -87,7 +87,20 @@ struct ContentView: View {
                                     lastInputIsOp = false
                                     
                                 } else if buttonTitle == "=" {
-                                    if !firstValue.isEmpty && !operatorString.isEmpty {
+                                    if !firstValue.isEmpty && !operatorString.isEmpty  {
+                                        
+                                        switch operatorString {
+                                        case "÷":
+                                            performCalculation(operation: /)
+                                        case "×":
+                                            performCalculation(operation: *)
+                                        case "-":
+                                            performCalculation(operation: -)
+                                        case "+":
+                                            performCalculation(operation: +)
+                                        default:
+                                            print("Invalid operator")
+                                        }
                                         
                                         lastInputIsOp = false
                                     }
@@ -106,6 +119,13 @@ struct ContentView: View {
                                         firstValue = ""
                                     }
                                     
+                                } else if buttonTitle == "." {
+                                   
+                                    if !input.contains(".") && input.count < 7{
+                                 
+                                            input += buttonTitle
+                                    }
+                                    
                                 }  else {
                                     if lastInputIsOp {
                                         
@@ -114,7 +134,8 @@ struct ContentView: View {
                                         input = buttonTitle
                                         
                                     } else {
-                                        input += buttonTitle
+                                        if input.count < 7 {
+                                            input += buttonTitle}
                                     }
                                 }
                                 print(input)
@@ -148,6 +169,17 @@ struct ContentView: View {
         formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 0
         return formatter.string(from: NSNumber(value: number!)) ?? "\(String(describing: number))"
+    }
+    
+    func performCalculation(operation: (Double, Double) -> Double) {
+        let firstValueDouble = Double(firstValue) ?? 0
+        let inputValueDouble = Double(input) ?? 0
+        let ans = operation(firstValueDouble, inputValueDouble)
+        if ans.truncatingRemainder(dividingBy: 1) == 0 {
+               input = String(Int(ans)) 
+           } else {
+               input = String(ans)
+           }
     }
 }
 
