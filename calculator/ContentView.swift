@@ -21,6 +21,8 @@ struct ContentView: View {
     
     @State private var lastInputIsOp = false
     
+    @State private var showingResult = false
+    
     
     
     let buttons = [
@@ -62,7 +64,9 @@ struct ContentView: View {
                         
                         if self.isRightSwipeDetected {
                             
-                            input = String(input.dropLast())
+                            if !showingResult {
+                                input = String(input.dropLast())
+                            }
                             
                             self.isRightSwipeDetected = false
                             
@@ -85,6 +89,7 @@ struct ContentView: View {
                                     operatorString = ""
                                     firstValue = ""
                                     lastInputIsOp = false
+                                    showingResult = false
                                     
                                 } else if buttonTitle == "=" {
                                     if !firstValue.isEmpty && !operatorString.isEmpty  {
@@ -103,6 +108,7 @@ struct ContentView: View {
                                         }
                                         
                                         lastInputIsOp = false
+                                        showingResult = true
                                     }
                                     
                                 } else if columnIndex == 3 {
@@ -111,19 +117,20 @@ struct ContentView: View {
                                     lastInputIsOp = true
                                     
                                 } else if buttonTitle == "%" {
-                                   
+                                    
                                     if !input.isEmpty {
                                         
                                         input =   String(Double(input)!/100)
                                         lastInputIsOp = false
+                                        showingResult = false
                                         firstValue = ""
                                     }
                                     
                                 } else if buttonTitle == "." {
-                                   
+                                    
                                     if !input.contains(".") && input.count < 7{
-                                 
-                                            input += buttonTitle
+                                        
+                                        input += buttonTitle
                                     }
                                     
                                 }  else {
@@ -137,8 +144,9 @@ struct ContentView: View {
                                         if input.count < 7 {
                                             input += buttonTitle}
                                     }
+                                    showingResult = false
                                 }
-                                print(input)
+                                
                                 
                             }) {
                                 Text(buttonTitle)
@@ -176,13 +184,13 @@ struct ContentView: View {
         let inputValueDouble = Double(input) ?? 0
         let ans = operation(firstValueDouble, inputValueDouble)
         
-         if String(ans).count > 7 { // Check if the result is longer than 7 digits
-               input = String(format: "%.2e", ans) // Format in scientific notation with 2 decimal places
-           } else if ans.truncatingRemainder(dividingBy: 1) == 0 {
-               input = String(Int(ans))
-           } else {
-               input = String(ans)
-           }
+        if String(ans).count > 7 { // Check if the result is longer than 7 digits
+            input = String(format: "%.2e", ans) // Format in scientific notation with 2 decimal places
+        } else if ans.truncatingRemainder(dividingBy: 1) == 0 {
+            input = String(Int(ans))
+        } else {
+            input = String(ans)
+        }
     }
 }
 
