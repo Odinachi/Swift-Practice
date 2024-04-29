@@ -14,6 +14,10 @@ struct ContentView: View {
     
     @State private var input = ""
     
+    @State private var firstValue = ""
+    
+    @State private var operatorString = ""
+    
   
     
     let buttons = [
@@ -30,32 +34,37 @@ struct ContentView: View {
                 Spacer()
                 Text(input)
                     .fontWeight(.medium)
-                    .font(.system(size: 50))
+                    .font(.system(size: 80))
                     .lineLimit(1)
             }).frame(height: 250)  .gesture(
                 DragGesture()
                     .onChanged { gesture in
-                        withAnimation {
+                        
                             self.offset = gesture.translation
-                            // Check for right swipe
-                            if gesture.translation.width > 50 { // Adjust the threshold as needed
+                        
+                            if gesture.translation.width > 50 { 
+                                
                                 self.isRightSwipeDetected = true
                             }
                             else {
+                                
                                 self.isRightSwipeDetected = false
                             }
-                        }
+                        
                     }
                     .onEnded { gesture in
-                        withAnimation {
-                            // Reset offset
-                            self.offset = .zero
-                            if self.isRightSwipeDetected {
+                      
                             
+                            self.offset = .zero
+                            
+                            if self.isRightSwipeDetected {
+                                
                             input = String(input.dropLast())
-                           self.isRightSwipeDetected = false
+                                
+                            self.isRightSwipeDetected = false
+                                
                             }
-                        }
+                        
                     }
             )
         
@@ -65,12 +74,25 @@ struct ContentView: View {
                                ForEach(buttons[rowIndex].indices, id: \.self) { columnIndex in
                                    let buttonTitle = buttons[rowIndex][columnIndex]
                                    Button(action: {
-                                      input += buttonTitle
+                                       if buttonTitle == "AC" {
+                                           input = ""
+                                       } else if buttonTitle == "=" {
+                                           
+                                       } else if buttonTitle == "%" {
+
+                                           if !input.isEmpty {
+                                             input =   String(Double(input)!/100)
+                                           }
+                                       }  else {
+                                           input += buttonTitle
+                                       }
+                                       print(input)
+                                      
                                    }) {
                                        Text(buttonTitle)
                                            .font(.custom("DM Sans", size: 30)).fontWeight(.black).padding()
                                            .frame(width:buttonTitle == "0" ? 170:  80, height: 80)
-                                           .background(columnIndex == 3 || buttonTitle == "=" ? .orange:  rowIndex == 0 ? Color.primary.opacity(0.7): .primary.opacity(0.2))
+                                           .background(columnIndex == 3 || buttonTitle == "=" ? .orange:  rowIndex == 0 ? .primary.opacity(0.7): .primary.opacity(0.2))
                                            .foregroundColor(columnIndex == 3 || buttonTitle == "=" ? .white :rowIndex == 0 ? .black : .white)
                                            .cornerRadius(50)
                                    }
