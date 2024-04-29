@@ -120,10 +120,18 @@ struct ContentView: View {
                                     
                                     if !input.isEmpty {
                                         
-                                        input =   String(Double(input)!/100)
+                                      let ans =  Double(input)!/100
                                         lastInputIsOp = false
                                         showingResult = false
                                         firstValue = ""
+                                        
+                                        if String(ans).count > 6 {
+                                            input = String(format: "%.2e", ans)
+                                        } else if ans.truncatingRemainder(dividingBy: 1) == 0 {
+                                            input = String(Int(ans))
+                                        } else {
+                                            input = String(ans)
+                                        }
                                     }
                                     
                                 } else if buttonTitle == "." {
@@ -184,7 +192,7 @@ struct ContentView: View {
         let inputValueDouble = Double(input) ?? 0
         let ans = operation(firstValueDouble, inputValueDouble)
         
-        if String(ans).count > 7 { // Check if the result is longer than 7 digits
+        if String(ans).count > 6 { // Check if the result is longer than 7 digits
             input = String(format: "%.2e", ans) // Format in scientific notation with 2 decimal places
         } else if ans.truncatingRemainder(dividingBy: 1) == 0 {
             input = String(Int(ans))
