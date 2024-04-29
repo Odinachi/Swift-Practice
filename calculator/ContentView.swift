@@ -175,8 +175,11 @@ struct ContentView: View {
         let firstValueDouble = Double(firstValue) ?? 0
         let inputValueDouble = Double(input) ?? 0
         let ans = operation(firstValueDouble, inputValueDouble)
-        if ans.truncatingRemainder(dividingBy: 1) == 0 {
-               input = String(Int(ans)) 
+        
+         if String(ans).count > 7 { // Check if the result is longer than 7 digits
+               input = String(format: "%.2e", ans) // Format in scientific notation with 2 decimal places
+           } else if ans.truncatingRemainder(dividingBy: 1) == 0 {
+               input = String(Int(ans))
            } else {
                input = String(ans)
            }
