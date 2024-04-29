@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var input = ""
+    
     let buttons = [
            ["AC", "+/-", "%", "÷"],
            ["7", "8", "9", "×"],
@@ -20,22 +22,20 @@ struct ContentView: View {
         VStack {
             HStack(alignment: .lastTextBaseline,content:{
                 Spacer()
-                Text("0000000")
+                Text(input)
                     .fontWeight(.medium)
-                .font(.system(size: 50))
-            }).padding(.top, 100)
-                
-            
-            
-            
+                    .font(.system(size: 50))
+                    .lineLimit(1)
+            }).frame(height: 250)
+        
             VStack(spacing: 15) {
                        ForEach(buttons.indices, id: \.self) { rowIndex in
                            HStack(spacing: 15) {
                                ForEach(buttons[rowIndex].indices, id: \.self) { columnIndex in
                                    let buttonTitle = buttons[rowIndex][columnIndex]
                                    Button(action: {
-                                       // Handle button tap
-                                       print("Tapped: \(buttonTitle)")
+                                       print("kkkkkk \(buttonTitle)")
+                                      input += buttonTitle
                                    }) {
                                        Text(buttonTitle)
                                            .font(.custom("DM Sans", size: 30)).fontWeight(.black).padding()
