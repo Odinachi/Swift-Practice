@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var offset: CGSize = .zero
+    @State private var isRightSwipeDetected = false
+    
     @State private var input = ""
+    
+  
     
     let buttons = [
            ["AC", "+/-", "%", "÷"],
@@ -20,13 +25,38 @@ struct ContentView: View {
        ]
     var body: some View {
         VStack {
+            Spacer()
             HStack(alignment: .lastTextBaseline,content:{
                 Spacer()
                 Text(input)
                     .fontWeight(.medium)
                     .font(.system(size: 50))
                     .lineLimit(1)
-            }).frame(height: 250)
+            }).frame(height: 250)  .gesture(
+                DragGesture()
+                    .onChanged { gesture in
+                        withAnimation {
+                            self.offset = gesture.translation
+                            // Check for right swipe
+                            if gesture.translation.width > 50 { // Adjust the threshold as needed
+                                self.isRightSwipeDetected = true
+                            }
+                            else {
+                                self.isRightSwipeDetected = false
+                            }
+                        }
+                    }
+                    .onEnded { gesture in
+                        withAnimation {
+                            // Reset offset
+                            self.offset = .zero
+                            if self.isRightSwipeDetected {
+                                input.dropLast()
+                                self.isRightSwipeDetected = false
+                            }
+                        }
+                    }
+            )
         
             VStack(spacing: 15) {
                        ForEach(buttons.indices, id: \.self) { rowIndex in
@@ -34,7 +64,6 @@ struct ContentView: View {
                                ForEach(buttons[rowIndex].indices, id: \.self) { columnIndex in
                                    let buttonTitle = buttons[rowIndex][columnIndex]
                                    Button(action: {
-                                       print("kkkkkk \(buttonTitle)")
                                       input += buttonTitle
                                    }) {
                                        Text(buttonTitle)
