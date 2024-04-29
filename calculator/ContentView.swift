@@ -18,16 +18,19 @@ struct ContentView: View {
        ]
     var body: some View {
         VStack {
-            Text("000000000000")
-                .fontWeight(.medium)
-                .font(.system(size: 40)).frame(height: 300)
-                .frame( maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, alignment: .bottomTrailing  )
-                .multilineTextAlignment(.trailing).padding(.bottom, 30)
+            HStack(alignment: .lastTextBaseline,content:{
+                Spacer()
+                Text("0000000")
+                    .fontWeight(.medium)
+                .font(.system(size: 50))
+            }).padding(.top, 100)
+                
             
             
-            VStack(spacing: 10) {
+            
+            VStack(spacing: 15) {
                        ForEach(buttons.indices, id: \.self) { rowIndex in
-                           HStack(spacing: 10) {
+                           HStack(spacing: 15) {
                                ForEach(buttons[rowIndex].indices, id: \.self) { columnIndex in
                                    let buttonTitle = buttons[rowIndex][columnIndex]
                                    Button(action: {
@@ -35,10 +38,10 @@ struct ContentView: View {
                                        print("Tapped: \(buttonTitle)")
                                    }) {
                                        Text(buttonTitle)
-                                           .font(.custom("DM Sans", size: 30)).fontWeight(.heavy).padding()
-                                           .frame(width: 80, height: 80)
-                                           .background(rowIndex == 0 ? Color.primary.opacity(0.7): .white.opacity(0.2))
-                                           .foregroundColor(rowIndex == 0 ? .black : .white)
+                                           .font(.custom("DM Sans", size: 30)).fontWeight(.black).padding()
+                                           .frame(width:buttonTitle == "0" ? 170:  80, height: 80)
+                                           .background(columnIndex == 3 || buttonTitle == "=" ? .orange:  rowIndex == 0 ? Color.primary.opacity(0.7): .primary.opacity(0.2))
+                                           .foregroundColor(columnIndex == 3 || buttonTitle == "=" ? .white :rowIndex == 0 ? .black : .white)
                                            .cornerRadius(50)
                                    }
                                }
