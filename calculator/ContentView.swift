@@ -51,8 +51,9 @@ struct ContentView: View {
                             // Reset offset
                             self.offset = .zero
                             if self.isRightSwipeDetected {
-                                input.dropLast()
-                                self.isRightSwipeDetected = false
+                            
+                            input = String(input.dropLast())
+                           self.isRightSwipeDetected = false
                             }
                         }
                     }
